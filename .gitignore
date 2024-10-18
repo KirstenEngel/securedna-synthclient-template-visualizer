@@ -1,5 +1,10 @@
 token*
 node_modules
+
+# Ignore virtual environment directory
+venv/
+
+# Exclude token and certificate files
 token.st
 token.priv
 token.passphrase
