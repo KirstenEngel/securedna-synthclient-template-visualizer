@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <title>Screening Result</title>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+      <div class="container">
+          <h1 class="mt-5">Screening Result</h1>
+          {% if result.synthesis_permission == 'granted' %}
+          <div class="alert alert-success">
+              <strong>Synthesis Permission:</strong> Granted
+          </div>
+          {% else %}
+          <div class="alert alert-danger">
+              <strong>Synthesis Permission:</strong> Denied
+          </div>
+          <h3>Hazards Detected:</h3>
+          {% for record in result.hits_by_record %}
+              <div class="card mb-3">
+                  <div class="card-header">
+                      <strong>FASTA Header:</strong> {{ record.fasta_header }}
+                  </div>
+                  <div class="card-body">
+                      <p><strong>Sequence Length:</strong> {{ record.sequence_length }} bp</p>
+                      {% for hazard in record.hits_by_hazard %}
+                          <h5>Organism: {{ hazard.most_likely_organism.name }}</h5>
+                          <p><strong>Organism Type:</strong> {{ hazard.most_likely_organism.organism_type }}</p>
+                          <p><strong>Tags:</strong> {{ hazard.most_likely_organism.tags | join(', ') }}</p>
+                          <p><strong>Hit Regions:</strong></p>
+                          <ul>
+                              {% for hit in hazard.hit_regions %}
+                                  <li>
+                                      Position: {{ hit.seq_range_start }} - {{ hit.seq_range_end }}<br>
+                                      Sequence: {{ hit.seq }}
+                                  </li>
+                              {% endfor %}
+                          </ul>
+                      {% endfor %}
+                  </div>
+              </div>
+          {% endfor %}
+          {% endif %}
+          <a href="/" class="btn btn-primary">Submit Another Sequence</a>
+      </div>
+  </body>
+  </html>

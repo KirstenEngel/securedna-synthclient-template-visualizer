@@ -1,2 +1,5 @@
 token*
 node_modules
+token.st
+token.priv
+token.passphrase
